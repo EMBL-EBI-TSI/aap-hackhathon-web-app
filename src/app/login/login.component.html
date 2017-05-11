@@ -1,3 +1,16 @@
-<p>
-  login works!
-</p>
+<section>
+  
+  <form #loginForm="ngForm">
+    <div *ngIf="!token">
+      <h3>Login Page</h3>
+      <label>Username: </label>
+      <input type="text" [(ngModel)]="username" name="username"  required><br>
+      <label>Password: </label>
+      <input type="password" [(ngModel)]="password" name="password"  required><br>
+      <button type="submit" (click)="authenticateUser()">SignIn</button>
+    </div>
+    <div *ngIf="token">
+      Welcome to AAP
+    </div>
+  </form>
+</section>
