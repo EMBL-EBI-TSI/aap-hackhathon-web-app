@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Renderer} from '@angular/core';
 import{AuthService} from '../auth.service'
 
 @Component({
@@ -11,7 +11,21 @@ export class LoginComponent implements OnInit {
   username: string;
   password:string
   token:string;
-  constructor( private authService:AuthService) { }
+  removeMessageListener: Function;
+  constructor( private authService:AuthService,
+  renderer: Renderer) {
+    // We cache the function "listenGlobal" returns, as it's one that allows to cleanly unregister the event listener
+    this.removeMessageListener = renderer.listenGlobal('window', 'message', (event: MessageEvent) => {
+      if (!this.authService.canAcceptMessage(event)) {
+        console.warn("received unacceptable message! Ignoring...", event);
+        return;
+      }
+      this.token = event.data;
+      console.log("Received SSO token: "+this.token);
+      //this.saveToken(event.data);
+      event.source.close();
+    });
+   }
 
   ngOnInit() {
     this.username = "";
@@ -44,6 +58,15 @@ export class LoginComponent implements OnInit {
     }else{
       console.log("else block");
     }
+  }
+
+  /**
+   * returns sso url
+   */
+  getSSOURL() {
+    this.errorMessage = "";
+    console.log("get sso: "+this.authService.getSSOURL());
+    return this.authService.getSSOURL();
   }
 
 }

@@ -34,6 +34,28 @@ export class AuthService {
         }
       });
   }
+
+/**
+   * URL that allows logging into the SSO, it should be opened in a new tab,
+   * using target="_blank". To receive the resulting JWT token it is necessary
+   * to set up a listener, using getTokenListenerRemover()
+   * @returnType { string } The SSO URL.
+   */
+  public getSSOURL(): string {
+    return 'https://explore.api.aap.tsi.ebi.ac.uk/' +
+           'sso?from=' +
+          encodeURIComponent(window.location.origin);
+  }
+
+  public canAcceptMessage(message: MessageEvent): boolean {
+    let expectedUrl = 'https://explore.api.aap.tsi.ebi.ac.uk/'.replace(/\/$/, "");
+    let acceptable = (message.origin == expectedUrl);
+    if(!acceptable) {
+      console.log("received message from unexpected origin ", message.origin);
+    }
+    return acceptable;
+  }
+
   /**
    * create headers
    */
@@ -45,4 +67,6 @@ export class AuthService {
     headers.append('Content-Type', 'application/json');
     return headers;
   }
+
+
 }

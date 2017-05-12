@@ -1,13 +1,17 @@
 <section>
-  
   <form #loginForm="ngForm">
     <div *ngIf="!token">
-      <h3>Login Page</h3>
-      <label>Username: </label>
-      <input type="text" [(ngModel)]="username" name="username"  required><br>
-      <label>Password: </label>
-      <input type="password" [(ngModel)]="password" name="password"  required><br>
-      <button type="submit" (click)="authenticateUser()">SignIn</button>
+      <h3>AAP Login Page</h3>
+        Username:
+        <input type="text" [(ngModel)]="username" name="username"  required><br>
+        Password:
+        <input type="password" [(ngModel)]="password" name="password"  required><br><br>
+      <!--signin button-->
+      <button type="button" (click)="authenticateUser()">SignIn</button>
+      <!--end-->
+      <!--sso-->
+      <a  type="button" href="{{getSSOURL()}}" target="_blank">SSO</a>
+      <!--end-->
     </div>
     <div *ngIf="token">
       Welcome to AAP
